@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/imohamedsheta/xapp/main/public/images/xapp/logo.png" alt="XApp Logo" width="80" />
+<img src="https://raw.githubusercontent.com/imohamedsheta/xapp/main/public/images/logo/logo.png" alt="XApp Logo" width="80" />
 
 # XApp — Go SaaS Starter Kit
 
@@ -407,11 +407,3 @@ For process management, use **systemd** or a supervisor like `s6` or `supervisor
 ## License
 
 Distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.
-
----
-
-<div align="center">
-
-Built with ❤️ in Go · [github.com/imohamedsheta/xapp](https://github.com/imohamedsheta/xapp)
-
-</div>
