@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html class="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
+  <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet"> -->
+  <link rel="manifest" href="/public/build/manifest.webmanifest">
+  <link rel="icon" type="image/png" href="/public/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/public/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/public/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Connect4ar" />
+  <link rel="manifest" href="/public/favicon/site.webmanifest" />
+
+  <script>
+    (function () {
+      const appearance = 'dark';
+
+      if (appearance === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (prefersDark) {
+          document.documentElement.classList.add('dark');
+        }
+      }
+    })();
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Cairo';
+      src: url('/public/fonts/Cairo/Cairo-VariableFont_slnt,wght.ttf') format('truetype');
+      font-weight: 100 1000;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cascadia Code';
+      src: url('/public/fonts/Cascadia_Code/CascadiaCode-VariableFont_wght.ttf') format('truetype');
+      font-weight: 100 1000;
+      font-display: swap;
+    }
+  </style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Amiri:wght@400;700&family=Changa:wght@300;400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700;800&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    html {
+      background-color: oklch(1 0 0);
+    }
+
+    html.dark {
+      background-color: oklch(0.145 0 0);
+    }
+
+    body {
+      font-style: normal;
+      font-variation-settings: "slnt" 0, "wght" 500;
+      overflow-y: scroll !important;
+      padding: 0% !important;
+      margin: 0% !important;
+    }
+  </style>
+
+  <title inertia></title>
+
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+  {{ .inertiaHead }}
+
+</head>
+
+<body class="antialiased">
+  {{ .inertia }}
+
+  {{ vite "resources/js/app.ts" }}
+</body>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    app = document.querySelector('#app');
+    if (app) {
+      app.setAttribute('vaul-drawer-wrapper', '')
+    }
+  });
+</script>
+
+</html>

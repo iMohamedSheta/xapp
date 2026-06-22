@@ -1,0 +1,92 @@
+package middleware
+
+import (
+	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/x"
+)
+
+const (
+	defaultOrigin         = "*"
+	defaultAllowedHeaders = "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, X-XSRF-TOKEN, Authorization, accept, origin, Cache-Control, X-Requested-With"
+	defaultAllowedMethods = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+)
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		rawCors, err := x.Config().Get("cors")
+		if err != nil {
+			c.Next()
+			return
+		}
+
+		cors := rawCors.(map[string]any)
+
+		reqOrigin := c.Request.Header.Get("Origin")
+		allowedOrigins := utils.ToArrayOfStrings(cors["origin"], []string{defaultOrigin})
+
+		allowOrigin := ""
+		for _, o := range allowedOrigins {
+			if o == "*" || o == reqOrigin {
+				allowOrigin = o
+				break
+			}
+
+			// allow subdomains, e.g. any {agency}.localhost:8080
+			if strings.HasPrefix(o, "*.") && strings.HasSuffix(reqOrigin, o[1:]) {
+				allowOrigin = reqOrigin
+				break
+			}
+		}
+
+		// Fallback: always reflect private-network (LAN / loopback) origins so
+		// that local clients work regardless of which IP they happen to use.
+		if allowOrigin == "" && reqOrigin != "" {
+			if host := utils.OriginHost(reqOrigin); utils.IsPrivateOrLoopback(host) {
+				allowOrigin = reqOrigin
+			}
+		}
+
+		if allowOrigin != "" {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", allowOrigin)
+		}
+
+		methods := utils.ToCSV(cors["methods"], defaultAllowedMethods)
+		headers := utils.ToCSV(cors["allowed_headers"], defaultAllowedHeaders)
+
+		c.Writer.Header().Set("Access-Control-Allow-Methods", methods)
+		c.Writer.Header().Set("Access-Control-Allow-Headers", headers)
+
+		if exposed := utils.ToCSV(cors["exposed_headers"], ""); exposed != "" {
+			c.Writer.Header().Set("Access-Control-Expose-Headers", exposed)
+		}
+
+		if maxAge, ok := cors["max_age"].(string); ok {
+			c.Writer.Header().Set("Access-Control-Max-Age", maxAge)
+		}
+
+		// Only set credentials if origin is not "*" and credentials are set to true in the config (cors policy)
+		if cred, ok := cors["credentials"].(bool); ok && cred && allowOrigin != "*" {
+			c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		}
+
+		// Allow private network access (e.g. LAN, loopback) when opted in via config.
+		// Chrome sends "Access-Control-Request-Private-Network: true" on preflight
+		// requests that cross a public→private or private→loopback boundary.
+		// Responding with the same header grants permission for that request.
+		if allow, ok := cors["allow_private_networks"].(bool); ok && allow {
+			if c.Request.Header.Get("Access-Control-Request-Private-Network") == "true" {
+				c.Writer.Header().Set("Access-Control-Allow-Private-Network", "true")
+			}
+		}
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}

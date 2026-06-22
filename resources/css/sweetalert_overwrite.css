@@ -1,0 +1,58 @@
+/* SweetAlert2 - Shadcn Dark/Light Theme using CSS variables */
+
+.swal2-popup {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Title & Text */
+.swal2-title {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.swal2-html-container {
+  color: var(--muted-foreground);
+}
+
+/* Confirm button - primary color */
+.swal2-confirm {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+}
+
+.swal2-confirm:hover {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Cancel button - destructive color */
+.swal2-cancel {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border: 1px solid var(--destructive);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.swal2-cancel:hover {
+  background-color: hsla(0, 84%, 60%, 0.795); /* slightly lighter red for hover */
+  border-color: hsla(0, 84%, 60%, 0.774);
+}
+
+/* Close button */
+.swal2-close {
+  color: var(--destructive);
+  transition: color 0.2s;
+}
+
+.swal2-close:hover {
+  color: hsla(0, 84%, 60%, 0.774);
+}

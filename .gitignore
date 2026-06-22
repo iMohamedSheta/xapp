@@ -1,0 +1,8 @@
+.env
+/storage/logs/
+/storage/app/
+/public/hot
+/tmp
+/node_modules
+/builds/app/storage/
+/builds/releases
