@@ -6,3 +6,5 @@
 /node_modules
 /builds/app/storage/
 /builds/releases
+/public/build/
+/resources/build
