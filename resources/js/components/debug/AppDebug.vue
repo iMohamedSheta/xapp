@@ -1,29 +1,133 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watchEffect, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watchEffect, computed, watch } from 'vue'
 import { GripVertical, Clock, Database, Server, User, Zap, Component, BugPlayIcon } from 'lucide-vue-next'
 import { usePage } from '@inertiajs/vue3'
 import { AppPageProps } from '../../types/index'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { ChevronDown, ChevronRight } from 'lucide-vue-next'
 import Button from '../ui/button/Button.vue'
-import { JsonViewer } from '@anilkumarthakur/vue3-json-viewer';
-import '@anilkumarthakur/vue3-json-viewer/styles.css';
+import { JsonViewer } from '@anilkumarthakur/vue3-json-viewer'
+import '@anilkumarthakur/vue3-json-viewer/styles.css'
+import axios from 'axios'
 
+// ---------------------------------------------------------------------------
+// Debug data — sourced from X-Debug-Data response header (works for all methods)
+// ---------------------------------------------------------------------------
+const page = usePage<AppPageProps>()
+const rawDebug = ref<any>(null)
 
-const tabs = [
+// Sync with Inertia page props (primarily for initial page load and GET visits)
+watchEffect(() => {
+  if (page.props.debug) {
+    rawDebug.value = page.props.debug
+  }
+})
+
+// Compile list of all requests inside the current debug pack (history + current)
+const requestList = computed(() => {
+  if (!rawDebug.value) return []
+  if (rawDebug.value.history && Array.isArray(rawDebug.value.history)) {
+    return rawDebug.value.history.map((r: any) => ({
+      id: r.request?.id || 'unknown',
+      label: `${r.request?.method || 'GET'} ${r.request?.path || ''} (${r.request?.status || 200})`,
+      data: r
+    }))
+  }
+  return [{
+    id: rawDebug.value.request?.id || 'current',
+    label: `${rawDebug.value.request?.method || 'GET'} ${rawDebug.value.request?.path || ''}`,
+    data: rawDebug.value
+  }]
+})
+
+const selectedRequestId = ref<string | null>(null)
+
+watch(rawDebug, (newVal) => {
+  if (newVal) {
+    if (newVal.history && newVal.history.length > 0) {
+      // Default to the first (newest) request in history
+      selectedRequestId.value = newVal.history[0].request?.id || 'current'
+    } else {
+      selectedRequestId.value = newVal.request?.id || 'current'
+    }
+  } else {
+    selectedRequestId.value = null
+  }
+}, { immediate: true })
+
+const debug = computed(() => {
+  if (!rawDebug.value) return null
+  const match = requestList.value.find((r: any) => r.id === selectedRequestId.value)
+  return match ? match.data : rawDebug.value
+})
+
+let originalOpen: any = null
+let originalFetch: any = null
+
+onMounted(() => {
+  isDebugbarVisible.value = localStorage.getItem('debugbar_visible') === 'true'
+  document.addEventListener('mousemove', onMouseMove)
+  document.addEventListener('mouseup', onMouseUp)
+
+  // 1. Hook XMLHttpRequest to capture X-Debug-Data header from any AJAX requests (like Inertia, Axios, jQuery, etc.)
+  originalOpen = XMLHttpRequest.prototype.open
+  XMLHttpRequest.prototype.open = function (this: any) {
+    this.addEventListener('readystatechange', () => {
+      if (this.readyState === 4) { // DONE
+        const header = this.getResponseHeader('X-Debug-Data') || this.getResponseHeader('x-debug-data')
+        if (header) {
+          try {
+            rawDebug.value = JSON.parse(header)
+          } catch {
+            // ignore malformed JSON
+          }
+        }
+      }
+    })
+    return originalOpen.apply(this, arguments as any)
+  }
+
+  // 2. Hook Fetch API to capture X-Debug-Data header
+  originalFetch = window.fetch
+  window.fetch = async function (this: any, ...args: any[]) {
+    const response = await originalFetch.apply(this, args)
+    const header = response.headers.get('X-Debug-Data') || response.headers.get('x-debug-data')
+    if (header) {
+      try {
+        rawDebug.value = JSON.parse(header)
+      } catch {
+        // ignore malformed JSON
+      }
+    }
+    return response
+  }
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('mousemove', onMouseMove)
+  document.removeEventListener('mouseup', onMouseUp)
+  if (originalOpen) {
+    XMLHttpRequest.prototype.open = originalOpen
+  }
+  if (originalFetch) {
+    window.fetch = originalFetch
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Tabs — query count must be reactive
+// ---------------------------------------------------------------------------
+const tabs = computed(() => [
   { id: 'timeline', label: 'Timeline' },
   { id: 'request', label: 'Request' },
-  { id: 'queries', label: 'Queries' + ' (' + (usePage<AppPageProps>().props.debug?.queries?.length || 0) + ')' },
+  { id: 'queries', label: `Queries (${debug.value?.queries?.length ?? 0})` },
   { id: 'components', label: 'Components' },
-  // { id: 'logs', label: 'Logs' },
   { id: 'raw', label: 'Raw' },
-]
+])
 
 const activeTab = ref<string | null>(null)
-const isDebugbarVisible = ref(true)
+const isDebugbarVisible = ref(false)
 
-const page = usePage<AppPageProps>()
-const debug = computed(() => page.props.debug)
 
 // Get all component instances from the current page
 const componentsData = computed(() => {
@@ -177,7 +281,7 @@ const timelineData = computed(() => {
   const queryCount = debug.value.queries?.length || 0
 
   // Calculate query total time
-  const queryTotalTime = debug.value.queries?.reduce((total, query) => {
+  const queryTotalTime = debug.value.queries?.reduce((total: number, query: any) => {
     return total + convertToMs(query.execDuration)
   }, 0) || 0
 
@@ -252,12 +356,6 @@ function onMouseUp() {
   isResizing = false
 }
 
-onMounted(() => {
-  document.addEventListener('mousemove', onMouseMove)
-  document.addEventListener('mouseup', onMouseUp)
-  isDebugbarVisible.value = localStorage.getItem('debugbar_visible') === 'true' ? true : false
-})
-
 function highlightSql(sql: string) {
   return sql.replace(
     /\b(SELECT|FROM|WHERE|LIMIT|INSERT|INTO|VALUES|UPDATE|DELETE|JOIN|INNER|LEFT|RIGHT|FULL|OUTER|ON|AS|DISTINCT|GROUP|BY|ORDER|HAVING|UNION|ALL|EXCEPT|INTERSECT|CREATE|TABLE|PRIMARY|KEY|FOREIGN|NOT|NULL|DEFAULT|CHECK|CONSTRAINT|ALTER|ADD|DROP|TRUNCATE|INDEX|VIEW|SEQUENCE|TRIGGER|BEGIN|COMMIT|ROLLBACK|GRANT|REVOKE|CASCADE|AND|OR|IN|IS|BETWEEN|LIKE|ILIKE|EXISTS|CASE|WHEN|THEN|ELSE|END)\b/gi,
@@ -288,6 +386,7 @@ function getShortPath(filePath: string) {
   return filePath
 }
 </script>
+
 
 <template>
   <!-- Floating Debug Button (shows when debugbar is hidden) -->
@@ -673,7 +772,7 @@ function getShortPath(filePath: string) {
                     }}):</span>
                     <div class="bg-gray-100 dark:bg-gray-800 rounded p-3 space-y-1">
                       <div v-for="(mw, idx) in debug.route.middleware" :key="idx" class="flex items-start space-x-2">
-                        <span class="text-gray-500 dark:text-gray-400 font-mono">{{ idx + 1 }}.</span>
+                        <span class="text-gray-500 dark:text-gray-400 font-mono">{{ +idx + 1 }}.</span>
                         <code class="text-[11px] text-gray-700 dark:text-gray-300 break-all">{{ mw }}</code>
                       </div>
                     </div>
@@ -710,6 +809,16 @@ function getShortPath(filePath: string) {
         class="absolute left-0 bg-[#fafafa] dark:bg-[#1a1a1a] hover:bg-[#e6e4e4] dark:hover:bg-[#252525] shadow-lg  transition-all duration-200 hover:scale-110">
         <BugPlayIcon class="size-6 text-red-500 dark:text-red-400" />
       </Button>
+
+      <!-- Request Selector Dropdown (shows when history exists) -->
+      <div v-if="requestList.length > 1" class="absolute left-14 flex items-center space-x-2">
+        <select id="debug-request-select" v-model="selectedRequestId"
+          class="bg-white dark:bg-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded px-2 py-0.5 text-[11px] outline-none max-w-[250px] truncate font-medium cursor-pointer transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-700">
+          <option v-for="req in requestList" :key="req.id" :value="req.id">
+            {{ req.label }}
+          </option>
+        </select>
+      </div>
 
       <button v-for="tab in tabs" :key="tab.id" @click="toggleTab(tab.id)" :class="[
         'py-1 px-2 rounded-sm hover:bg-[#e6e4e4] focus:outline-none dark:hover:bg-[#202020] dark:focus:outline-none',

@@ -22,15 +22,6 @@ func InitInertiaHooks(i *inertia.Inertia, flash *inertia.InmemFlashProvider) {
 		}
 
 		reqID, _ := ctx.Value(enums.ContextKeyRequestId.String()).(string)
-		// logError("Calling OnBeforeRender Inertia Hook")
-
-		if reqID == "" {
-			logError("Failed to get request id from context")
-			return
-		}
-
-		// logError("Calling OnBeforeRender Inertia Hook")
-
 		if reqID == "" {
 			logError("Failed to get request id from context")
 			return
@@ -38,11 +29,7 @@ func InitInertiaHooks(i *inertia.Inertia, flash *inertia.InmemFlashProvider) {
 
 		attachFlashErrors(ginCtx, flash)
 		attachUserProps(ginCtx)
-		// Always run this code after the request is done
-
-		if utils.IsDebug() {
-			attachDebugProps(ctx, ginCtx, reqID)
-		}
+		AttachDebugProps(ginCtx, reqID)
 	})
 }
 

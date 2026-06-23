@@ -24,6 +24,8 @@ func corsConfig(cfg *xfig.Config) {
 		},
 		"exposed_headers": []string{
 			"X-XSRF-TOKEN",
+			"X-Request-ID",
+			"X-Debug-Data",
 		},
 		"credentials":            true, // Allow cookies, HTTP auth, etc.
 		"allow_private_networks": true,

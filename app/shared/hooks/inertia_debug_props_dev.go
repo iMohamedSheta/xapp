@@ -3,9 +3,14 @@
 package hooks
 
 import (
-	"context"
-
 	"github.com/gin-gonic/gin"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 )
 
-func attachDebugProps(ctx context.Context, c *gin.Context, reqID string) {}
+// AttachDebugHeader is a no-op in non-dev builds.
+func AttachDebugHeader(c *gin.Context, reqID string) {
+	utils.PrintErr("AttachDebugHeader: called non-dev no-op stub for request: " + reqID)
+}
+
+// AttachDebugProps is a no-op in non-dev builds.
+func AttachDebugProps(c *gin.Context, reqID string) {}

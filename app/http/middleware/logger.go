@@ -7,10 +7,41 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/imohamedsheta/xapp/app/shared/enums"
+	"github.com/imohamedsheta/xapp/app/shared/hooks"
 	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 	"go.uber.org/zap"
 )
+
+type debugResponseWriter struct {
+	gin.ResponseWriter
+	c             *gin.Context
+	reqID         string
+	headerWritten bool
+}
+
+func (w *debugResponseWriter) WriteHeader(statusCode int) {
+	w.attachHeader()
+	w.ResponseWriter.WriteHeader(statusCode)
+}
+
+func (w *debugResponseWriter) Write(b []byte) (int, error) {
+	w.attachHeader()
+	return w.ResponseWriter.Write(b)
+}
+
+func (w *debugResponseWriter) WriteString(s string) (int, error) {
+	w.attachHeader()
+	return w.ResponseWriter.WriteString(s)
+}
+
+func (w *debugResponseWriter) attachHeader() {
+	if w.headerWritten {
+		return
+	}
+	w.headerWritten = true
+	hooks.AttachDebugHeader(w.c, w.reqID)
+}
 
 // Logger is a Gin middleware for logging HTTP requests using zap
 func Logger() gin.HandlerFunc {
@@ -44,8 +75,21 @@ func Logger() gin.HandlerFunc {
 
 		path := c.Request.URL.Path
 		utils.PrintErr("Path: " + path + " - request ID: " + reqID)
+
+		// Wrap response writer to capture and inject headers before response is flushed
+		dw := &debugResponseWriter{
+			ResponseWriter: c.Writer,
+			c:              c,
+			reqID:          reqID,
+		}
+		c.Writer = dw
+
 		// Process request
 		c.Next()
+
+		// Just in case no body was written (e.g. 204 No Content, 302 Redirect), trigger header writing now
+		dw.attachHeader()
+
 		// request termination (after the request has been processed)
 		latency := time.Since(start)
 		status := c.Writer.Status()

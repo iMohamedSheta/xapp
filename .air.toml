@@ -39,7 +39,7 @@ entrypoint = ["tmp\\main.exe"]
 
 [build.linux]
 args_bin = []
-cmd = "go build -o ./tmp/main ./cmd/server/main.go"
+cmd = "go build -tags=dev -o ./tmp/main ./cmd/server/main.go"
 bin = "./tmp/main"
 delay = 1000
 poll = true
