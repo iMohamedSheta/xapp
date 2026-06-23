@@ -1,6 +1,6 @@
 package events
 
-import "github.com/imohamedsheta/xapp/app/domain/enums"
+import "github.com/imohamedsheta/xapp/app/shared/enums"
 
 /*
 | This file will contain the payload of the events.

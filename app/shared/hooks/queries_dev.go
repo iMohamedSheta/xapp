@@ -4,11 +4,12 @@ package hooks
 
 import (
 	"context"
-	"github.com/imohamedsheta/xapp/app/domain/enums"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 
 	"github.com/iMohamedSheta/xqb"
 )

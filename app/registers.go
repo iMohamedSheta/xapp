@@ -4,16 +4,14 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/hibiken/asynq"
 	"github.com/imohamedsheta/xapp/app/cmd"
-	"github.com/imohamedsheta/xapp/app/domain/events"
-	"github.com/imohamedsheta/xapp/app/domain/notifications/handlers"
-	"github.com/imohamedsheta/xapp/app/domain/rules"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
-	"github.com/imohamedsheta/xapp/app/modules/audit_logs"
 	audit_logs_listeners "github.com/imohamedsheta/xapp/app/modules/audit_logs/listeners"
 	"github.com/imohamedsheta/xapp/app/modules/identity/auth"
-	"github.com/imohamedsheta/xapp/app/modules/identity/users"
 	notifications_listeners "github.com/imohamedsheta/xapp/app/modules/notifications/listeners"
 	"github.com/imohamedsheta/xapp/app/modules/settings"
+	"github.com/imohamedsheta/xapp/app/shared/events"
+	"github.com/imohamedsheta/xapp/app/shared/notifications/handlers"
+	"github.com/imohamedsheta/xapp/app/shared/rules"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 	"github.com/imohamedsheta/xapp/pkg/bus"
 	asynqBus "github.com/imohamedsheta/xapp/pkg/bus/asynq_backned"
@@ -98,11 +96,8 @@ func BusListeners() {
 		}
 	}
 
-	userRepository := x.AppMust[*users.UserRepository]()
-	auditLogRepository := x.AppMust[*audit_logs.AuditLogRepository]()
-
-	subscribe(events.EventUserLoggedIn, audit_logs_listeners.NewUserLoggedInListener(x.Notify(), auditLogRepository))
-	subscribe(events.EventUserLoggedIn, notifications_listeners.NewUserLoggedInListener(x.Notify(), userRepository))
+	subscribe(events.EventUserLoggedIn, x.AppMust[*audit_logs_listeners.UserLoggedInListener]())
+	subscribe(events.EventUserLoggedIn, x.AppMust[*notifications_listeners.UserLoggedInListener]())
 }
 
 // taskHandlers register task handlers for tasks and

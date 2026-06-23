@@ -4,9 +4,9 @@ import (
 	"os"
 
 	"github.com/hibiken/asynq"
-	"github.com/imohamedsheta/xapp/app/domain/adapters"
-	"github.com/imohamedsheta/xapp/app/domain/tasks"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/adapters"
+	"github.com/imohamedsheta/xapp/app/shared/tasks"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 	"github.com/imohamedsheta/xioc"
 	"github.com/imohamedsheta/xnotify"

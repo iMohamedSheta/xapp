@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/iMohamedSheta/xerr"
-	"github.com/imohamedsheta/xapp/app/domain/enums"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 	"github.com/imohamedsheta/xapp/app/x"
 	"github.com/redis/go-redis/v9"
 )

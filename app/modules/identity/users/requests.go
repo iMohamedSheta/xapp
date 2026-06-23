@@ -3,8 +3,8 @@ package users
 import (
 	"context"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
-	"github.com/imohamedsheta/xapp/app/domain/requests"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
+	"github.com/imohamedsheta/xapp/app/shared/requests"
 )
 
 // UserManagerFilters - Filters for manager's user list with role, status, and tenant filtering

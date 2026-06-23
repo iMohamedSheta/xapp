@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/iMohamedSheta/xqb"
-	"github.com/imohamedsheta/xapp/app/domain/enums"
 	"github.com/imohamedsheta/xapp/app/models"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 )
 
 type SettingRepository struct {

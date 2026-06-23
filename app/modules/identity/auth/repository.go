@@ -6,8 +6,8 @@ import (
 	"errors"
 
 	"github.com/iMohamedSheta/xqb"
-	"github.com/imohamedsheta/xapp/app/domain/enums"
 	"github.com/imohamedsheta/xapp/app/modules/settings"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 )
 
 // PermissionRepository handles all data access operations for user permissions.

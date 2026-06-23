@@ -2,7 +2,7 @@ package settings
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 )
 
 type SettingPolicy struct {

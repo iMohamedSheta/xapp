@@ -3,7 +3,7 @@ package utils
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/iMohamedSheta/xerr"
-	"github.com/imohamedsheta/xapp/app/domain/enums"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 )
 
 func AuthSessionId(c *gin.Context) (string, error) {

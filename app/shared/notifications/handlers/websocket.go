@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/imohamedsheta/xapp/app/models"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 
 	"github.com/imohamedsheta/xnotify"

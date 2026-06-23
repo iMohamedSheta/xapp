@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/hibiken/asynq"
-	"github.com/imohamedsheta/xapp/app/domain/adapters"
+	"github.com/imohamedsheta/xapp/app/shared/adapters"
 	"github.com/imohamedsheta/xapp/pkg/chainq"
 )
 

@@ -5,7 +5,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 )
 
 type Subscription struct {

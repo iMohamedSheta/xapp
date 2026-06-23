@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/imohamedsheta/xapp/app/domain/events"
-	"github.com/imohamedsheta/xapp/app/domain/notifications"
 	"github.com/imohamedsheta/xapp/app/models"
+	"github.com/imohamedsheta/xapp/app/shared/events"
+	"github.com/imohamedsheta/xapp/app/shared/notifications"
 	"github.com/imohamedsheta/xnotify"
 )
 

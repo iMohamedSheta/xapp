@@ -1,6 +1,6 @@
 package requests
 
-import "github.com/imohamedsheta/xapp/app/domain/requests"
+import "github.com/imohamedsheta/xapp/app/shared/requests"
 
 type DashboardFilters struct {
 	Period string `json:"period" form:"period" validate:"omitempty,oneof=today week month all"`

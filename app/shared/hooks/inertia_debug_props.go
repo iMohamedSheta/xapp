@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/imohamedsheta/xapp/app/domain/enums"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 	"github.com/imohamedsheta/xapp/app/x"
 )
 

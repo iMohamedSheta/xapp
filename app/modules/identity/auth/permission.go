@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 )
 

@@ -1,6 +1,6 @@
 package plans
 
-import "github.com/imohamedsheta/xapp/app/domain/requests"
+import "github.com/imohamedsheta/xapp/app/shared/requests"
 
 type PlanFilters struct {
 	IsActive *bool             `form:"is_active" json:"is_active"`

@@ -1,6 +1,6 @@
 package requests
 
-import "github.com/imohamedsheta/xapp/app/domain/requests"
+import "github.com/imohamedsheta/xapp/app/shared/requests"
 
 type CreateOrUpdatePaymentPaymobRequest struct {
 	PaymentGateway string `json:"payment_gateway" validate:"required,eq=paymob"`

@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/hibiken/asynq"
-	"github.com/imohamedsheta/xapp/app/domain/tasks"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/tasks"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 	"github.com/imohamedsheta/xapp/pkg/bus"
 	bus_asynq_backend "github.com/imohamedsheta/xapp/pkg/bus/asynq_backned"

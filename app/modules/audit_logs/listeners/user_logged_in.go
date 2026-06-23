@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"encoding/json"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
-	"github.com/imohamedsheta/xapp/app/domain/events"
 	"github.com/imohamedsheta/xapp/app/models"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
+	"github.com/imohamedsheta/xapp/app/shared/events"
 	"github.com/imohamedsheta/xnotify"
 )
 

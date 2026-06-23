@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 )
 
 /*

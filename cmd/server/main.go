@@ -2,8 +2,8 @@ package main
 
 import (
 	registers "github.com/imohamedsheta/xapp/app"
-	"github.com/imohamedsheta/xapp/app/domain/tasks/scheduler"
 	apphttp "github.com/imohamedsheta/xapp/app/http"
+	"github.com/imohamedsheta/xapp/app/shared/tasks/scheduler"
 	"github.com/imohamedsheta/xapp/bootstrap"
 	"github.com/imohamedsheta/xapp/bootstrap/support"
 )

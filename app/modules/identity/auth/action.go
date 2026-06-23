@@ -10,11 +10,11 @@ import (
 
 	"github.com/iMohamedSheta/xerr"
 	"github.com/iMohamedSheta/xqb"
-	"github.com/imohamedsheta/xapp/app/domain/enums"
-	"github.com/imohamedsheta/xapp/app/domain/events"
 	"github.com/imohamedsheta/xapp/app/models"
 	"github.com/imohamedsheta/xapp/app/modules/identity/tenants"
 	"github.com/imohamedsheta/xapp/app/modules/identity/users"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
+	"github.com/imohamedsheta/xapp/app/shared/events"
 	"github.com/imohamedsheta/xapp/app/x"
 	"github.com/imohamedsheta/xapp/config"
 	"github.com/imohamedsheta/xsocial"

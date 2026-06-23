@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/imohamedsheta/xapp/app/database/seeders"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/spf13/cobra"
 )
 

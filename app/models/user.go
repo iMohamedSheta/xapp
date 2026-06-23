@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/iMohamedSheta/xqb"
-	"github.com/imohamedsheta/xapp/app/domain/enums"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 )
 
 type User struct {

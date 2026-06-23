@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/hibiken/asynq"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 	"github.com/imohamedsheta/xioc"
 	"github.com/redis/go-redis/v9"

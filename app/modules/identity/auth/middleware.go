@@ -17,9 +17,9 @@ import (
 	"github.com/iMohamedSheta/xerr"
 	"github.com/iMohamedSheta/xqb"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
 	"github.com/imohamedsheta/xapp/app/models"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/pkg/inertia"
 )
 

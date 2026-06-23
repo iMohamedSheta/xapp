@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
-	"github.com/imohamedsheta/xapp/app/domain/hooks"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
+	"github.com/imohamedsheta/xapp/app/shared/hooks"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 	"github.com/imohamedsheta/xapp/pkg/inertia"
 	"github.com/imohamedsheta/xapp/resources"

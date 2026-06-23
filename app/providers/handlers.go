@@ -6,6 +6,8 @@ import (
 	"github.com/imohamedsheta/xapp/app/modules/identity/auth"
 	"github.com/imohamedsheta/xapp/app/modules/identity/tenants"
 	"github.com/imohamedsheta/xapp/app/modules/identity/users"
+	"github.com/imohamedsheta/xapp/app/modules/notifications"
+	notifications_listeners "github.com/imohamedsheta/xapp/app/modules/notifications/listeners"
 	"github.com/imohamedsheta/xapp/app/modules/settings"
 	"github.com/imohamedsheta/xioc"
 )
@@ -13,47 +15,70 @@ import (
 // Main register function for all providers
 func RegisterProviders(c *xioc.Container) {
 	RegisterMiddlewares(c)
-	RegisterRepositories(c)
-	RegisterServices(c)
-	RegisterActions(c)
-	RegisterHandlers(c)
-	RegisterPolicies(c)
+	RegisterShared(c)
+	//
+	RegisterSettingsModule(c)
+	RegisterAuditLogsModule(c)
+	RegisterUsersModule(c)
+	RegisterAuthModule(c)
+	RegisterTenantsModule(c)
 }
 
-// Register Services in Container
-func RegisterServices(c *xioc.Container) {
-	panicIfError(xioc.SingletonLazy(c, auth.NewJwtService))
-	panicIfError(xioc.SingletonLazy(c, auth.NewPermissionService))
-	panicIfError(xioc.SingletonLazy(c, users.NewUserService))
-	panicIfError(xioc.SingletonLazy(c, tenants.NewTenantService))
-	panicIfError(xioc.SingletonLazy(c, auth.NewAuthService))
+func RegisterModules(c *xioc.Container) {
+	// identity bounded context
+	RegisterAuthModule(c)
+	RegisterUsersModule(c)
+	RegisterTenantsModule(c)
+
+	// notifications bounded context
+	RegisterNotificationsModule(c)
+
+	// audit logs bounded context
+	RegisterAuditLogsModule(c)
+
+	// settings bounded context
+	RegisterSettingsModule(c)
 }
 
-// Register Actions in Container
-func RegisterActions(c *xioc.Container) {
-	panicIfError(xioc.SingletonLazy(c, auth.NewAuthAction))
-	panicIfError(xioc.SingletonLazy(c, settings.NewSettingAction))
+func RegisterNotificationsModule(c *xioc.Container) {
+	panicIfError(xioc.SingletonLazy(c, notifications.NewNotificationRepository))
+	panicIfError(xioc.SingletonLazy(c, notifications_listeners.NewUserLoggedInListener))
 }
 
-func RegisterPolicies(c *xioc.Container) {
-	panicIfError(xioc.SingletonLazy(c, settings.NewSettingPolicy))
-}
-
-// Register Repositories in Container
-func RegisterRepositories(c *xioc.Container) {
+func RegisterSettingsModule(c *xioc.Container) {
 	panicIfError(xioc.SingletonLazy(c, settings.NewSettingRepository))
-	panicIfError(xioc.SingletonLazy(c, auth.NewPermissionRepository))
-	panicIfError(xioc.SingletonLazy(c, users.NewUserRepository))
-	panicIfError(xioc.SingletonLazy(c, tenants.NewTenantRepository))
+	panicIfError(xioc.SingletonLazy(c, settings.NewSettingAction))
+	panicIfError(xioc.SingletonLazy(c, settings.NewSettingPolicy))
+	panicIfError(xioc.SingletonLazy(c, settings.NewSettingsHandler))
+}
+
+func RegisterAuditLogsModule(c *xioc.Container) {
 	panicIfError(xioc.SingletonLazy(c, audit_logs.NewAuditLogRepository))
 }
 
-// Register Handlers in Container
-func RegisterHandlers(c *xioc.Container) {
-	panicIfError(xioc.SingletonLazy(c, handler.NewBaseHandler))
-	panicIfError(xioc.SingletonLazy(c, auth.NewAuthHandler))
-	panicIfError(xioc.SingletonLazy(c, settings.NewSettingsHandler))
+func RegisterUsersModule(c *xioc.Container) {
+	panicIfError(xioc.SingletonLazy(c, users.NewUserRepository))
+	panicIfError(xioc.SingletonLazy(c, users.NewUserService))
 	panicIfError(xioc.SingletonLazy(c, users.NewAccountHandler))
+}
+
+func RegisterAuthModule(c *xioc.Container) {
+	panicIfError(xioc.SingletonLazy(c, auth.NewPermissionRepository))
+	panicIfError(xioc.SingletonLazy(c, auth.NewPermissionService))
+	panicIfError(xioc.SingletonLazy(c, auth.NewAuthService))
+	panicIfError(xioc.SingletonLazy(c, auth.NewAuthAction))
+	panicIfError(xioc.SingletonLazy(c, auth.NewAuthHandler))
+	panicIfError(xioc.SingletonLazy(c, auth.NewJwtService))
+}
+
+func RegisterTenantsModule(c *xioc.Container) {
+	panicIfError(xioc.SingletonLazy(c, tenants.NewTenantRepository))
+	panicIfError(xioc.SingletonLazy(c, tenants.NewTenantService))
+}
+
+// Register Handlers in Container
+func RegisterShared(c *xioc.Container) {
+	panicIfError(xioc.SingletonLazy(c, handler.NewBaseHandler))
 }
 
 // Register Middlewares in Container

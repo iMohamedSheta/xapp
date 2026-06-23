@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 
 	"github.com/iMohamedSheta/xerr"
 	"github.com/imohamedsheta/xnotify"

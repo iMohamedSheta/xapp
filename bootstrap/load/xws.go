@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/websocket"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 	"github.com/imohamedsheta/xapp/app/x"
 	"github.com/imohamedsheta/xioc"
 	"github.com/imohamedsheta/xws"

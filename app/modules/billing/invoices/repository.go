@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
-	"github.com/imohamedsheta/xapp/app/domain/utils"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
+	"github.com/imohamedsheta/xapp/app/shared/utils"
 
 	"strconv"
 	"time"

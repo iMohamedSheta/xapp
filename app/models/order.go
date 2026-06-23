@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/imohamedsheta/xapp/app/domain/enums"
+	"github.com/imohamedsheta/xapp/app/shared/enums"
 )
 
 // Order model matches the `orders` table
