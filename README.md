@@ -99,7 +99,7 @@ xapp/
 │   │   └── audit_logs/              #   Audit Logs context: activity trail listeners & repo
 │   │
 │   ├── http/                        # Global HTTP layer (router, middleware, routes wiring)
-│   ├── models/                      # Shared GORM model base types
+│   ├── models/                      # Shared xqb model base types
 │   ├── providers/                   # Service provider bindings (xioc DI wiring)
 │   ├── registers/                   # CLI command & validation rule registries
 │   ├── registers.go                 # Central wiring: bus, tasks, notify, websocket
@@ -142,7 +142,7 @@ Every sub-module inside a bounded context follows the same internal layout:
 app/modules/<context>/<module>/
 ├── actions/       # Single-responsibility business transactions (CreateUser, RenewSubscription...)
 ├── handlers/      # HTTP controllers — parse request, call action, return Inertia/JSON response
-├── models/        # GORM database schemas owned by this sub-module
+├── models/        # xqb database schemas owned by this sub-module
 ├── repositories/  # Database querying & persistence layer
 ├── requests/      # Input validation schemas (xvalid)
 └── listeners/     # Domain event listeners reacting to shared domain events
